@@ -63,9 +63,10 @@ void CDlgImage::OnPaint()
 	CPaintDC dc(this); // device context for painting
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 	// 그리기 메시지에 대해서는 CDialogEx::OnPaint()을(를) 호출하지 마십시오.
-	if (m_image) {
+	if (m_image) 
 		m_image.Draw(dc, 0, 0);
-	}
+	
+	drawData(&dc);
 }
 
 void CDlgImage::InitImage()
@@ -87,4 +88,18 @@ void CDlgImage::InitImage()
 	unsigned char* fm = (unsigned char*)m_image.GetBits();
 
 	memset(fm, 0xff, nWidth * nHeight);
+}
+
+void CDlgImage::drawData(CDC* pDC)
+{
+	CRect rect;
+	CPen pen;
+	pen.CreatePen(PS_SOLID, 1, RGB(0xff, 0, 0));
+	CPen* pOldPen = pDC->SelectObject(&pen);
+	for (int i = 0; i < m_nDataCount; i++) {
+		rect.SetRect(m_ptData[i], m_ptData[i]);
+		rect.InflateRect(2, 2);
+		pDC->Ellipse(rect);
+	}
+	pDC->SelectObject(pOldPen);
 }
